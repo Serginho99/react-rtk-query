@@ -1,24 +1,28 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getMovies } from 'redux/movies/moviesOperations';
 import {
-  selectorLoading,
-  selectorError,
-  selectorMoviesByGenre,
-} from 'redux/movies/moviesSelectors';
+  useGetMoviesQuery,
+  useLazyGetMoviesQuery,
+} from 'redux/movies/createApi';
+import { selectorMoviesByGenre } from 'redux/movies/moviesSelectors';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import { useSelector } from 'react-redux';
 
 export default function GalleryComponent() {
-  const dispatch = useDispatch();
-  const movies = useSelector(selectorMoviesByGenre);
-  const isLoading = useSelector(selectorLoading);
-  const isError = useSelector(selectorError);
   const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
+  const [fetchMovies, { data, isFetching: isLoading, isError }] =
+    useLazyGetMoviesQuery();
+
+  // const { data, isFetching: isLoading, isError } = useGetMoviesQuery();
+
+  const movies = useSelector(state =>
+    selectorMoviesByGenre(data?.results, state)
+  );
+
   useEffect(() => {
-    dispatch(getMovies());
-  }, [dispatch]);
+    fetchMovies();
+  }, [fetchMovies]);
 
   return (
     <ul
