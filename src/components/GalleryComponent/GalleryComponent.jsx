@@ -1,8 +1,5 @@
 import { useEffect } from 'react';
-import {
-  useGetMoviesQuery,
-  useLazyGetMoviesQuery,
-} from 'redux/movies/createApi';
+import { useLazyGetMoviesQuery } from 'redux/movies/createApi';
 import { selectorMoviesByGenre } from 'redux/movies/moviesSelectors';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
